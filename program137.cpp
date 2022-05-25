@@ -1,0 +1,265 @@
+#include<iostream>
+
+using namespace std;
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+typedef struct node NODE;
+typedef struct node * PNODE;
+typedef struct node ** PPNODE;
+
+class SinglyCLL
+{
+    private:        // Characteristics...
+        PNODE Head;
+        PNODE Tail;
+      
+
+    public:          //Behaviours...
+    
+    SinglyCLL();
+    void InsertFirst(int no);
+    void InsertLast(int no);
+    void InsertAtPos(int no,int ipos);
+    void DeleteFirst();
+    void DeleteLast();
+    void DeleteAtPos(int ipos);
+    void Display();
+    int Count();
+};
+ SinglyCLL :: SinglyCLL()
+ {
+    Head = NULL;
+    Tail = NULL;
+ }
+ void SinglyCLL :: InsertFirst(int no)
+ {
+     PNODE newn = NULL;
+
+     newn = new NODE;
+     newn->data = no;
+     newn->next = NULL;
+
+     if((Head == NULL) && (Tail == NULL))   // if LL is Empty.
+     {
+         Head = newn;
+         Tail = newn;
+     }
+     else                                  // if LL contains atleast one node.
+     {
+         newn->next = Head;
+         Head = newn;
+     }
+        Tail->next = Head;
+ }
+ void SinglyCLL :: InsertLast(int no)
+ {
+      PNODE newn = NULL;
+
+     newn = new NODE;
+     newn->data = no;
+     newn->next = NULL;
+
+     if((Head == NULL) && (Tail == NULL))   // if LL is Empty.
+     {
+         Head = newn;
+         Tail = newn;
+     }
+     else                                  // if LL contains atleast one node.
+     {
+         Tail->next = newn;
+         Tail = newn;
+     }
+        Tail->next = Head;
+ }
+ void SinglyCLL :: InsertAtPos(int no,int ipos)
+ {
+    PNODE temp = NULL;
+     int iCnt = 0,size = 0;
+
+        size = Count();
+     if((ipos < 1)|| (ipos > (size+1)))
+     {
+         printf("Invaild Position\n");
+         return;
+     }
+     else if(ipos == 1)
+     {
+         InsertFirst(no);
+     }
+    else if(ipos == (size+1))
+    {
+        InsertLast(no);
+    }
+    else
+    {
+        PNODE newn = NULL;
+
+        newn = new NODE;
+         newn->data = no;
+         newn->next = NULL;
+
+        PNODE temp = Head;
+        int iCnt = 0;
+
+        for(iCnt = 1;iCnt < (ipos-1); iCnt++)
+        {
+            temp = temp->next;
+        }
+        newn->next = temp->next;
+        temp->next = newn;
+
+    }
+
+
+ }
+ void SinglyCLL :: DeleteFirst()
+ {
+   if(Head == NULL && Tail == NULL)   //Filter LL is empty
+     {
+         return;
+     }
+    else if(Head == Tail)
+    {
+        delete Head;
+        Head = NULL;
+        Tail = NULL;
+    }
+    else
+    {
+        Head = Head->next;
+        delete Tail->next;
+
+        Tail->next = Head;
+    }
+ }
+ void SinglyCLL :: DeleteLast()
+ {
+     PNODE temp = Head;
+
+      if(Head == NULL && Tail == NULL)   //Filter LL is empty
+     {
+         return;
+     }
+     else if(Head == Tail)
+    {
+        delete Head;
+        Head = NULL;
+        Tail = NULL;
+    }
+    else
+    {
+        PNODE temp = Head;
+        while(temp->next != Tail)
+        {
+            temp = temp->next;
+        }
+
+        delete Tail;
+        Tail = temp;
+
+        Tail->next = Head;
+    }
+
+ }
+ void SinglyCLL :: DeleteAtPos(int ipos)
+ {
+      PNODE temp = NULL;
+     int iCnt = 0,size = 0;
+
+        size = Count();
+     if((ipos < 1)|| (ipos > size))
+     {
+         printf("Invaild Position\n");
+         return;
+     }
+     else if(ipos == 1)
+     {
+         DeleteFirst();
+     }
+    else if(ipos == (size+1))
+    {
+        DeleteLast();
+    }
+    else
+    {
+         PNODE temp1 = Head;
+        int iCnt = 0;
+
+        for(iCnt = 1;iCnt < (ipos-1); iCnt++)
+        {
+            temp1 = temp1->next;
+        }
+        PNODE temp2 = temp1->next;
+
+        temp1->next = temp2->next;
+        delete temp2;
+
+    }
+ }
+ void SinglyCLL :: Display()
+ {
+     PNODE temp = Head;
+
+    if(Head == NULL && Tail == NULL)    //if LL is Empty.. this is Filter
+    {
+        return;
+    }
+
+    do
+     {
+         cout<<"|"<<temp->data<<"|";
+         temp = temp->next;
+     } while(temp != Head);
+    cout<<endl;
+ }
+ int SinglyCLL :: Count()
+ {
+   PNODE temp = Head;
+   int iCnt = 0;
+
+    if(Head == NULL && Tail == NULL)
+    {
+        return 0;
+    }
+   do
+   {
+       iCnt++;
+       temp = temp->next;
+   }while(temp != Head);
+   return iCnt;
+ }
+
+int main()
+{
+    SinglyCLL obj;
+    int iRet = 0;
+    obj.InsertFirst(51);
+    obj.InsertFirst(21);
+    obj.InsertFirst(11);
+    obj.InsertLast(101);
+    obj.InsertLast(111);
+    obj.InsertFirst(121);
+    obj.InsertLast(151);
+    obj.InsertLast(201);
+
+    obj.Display();
+    iRet = obj.Count();
+    cout<<"Number of Nodes are : "<<iRet<<endl;
+
+
+ obj.InsertAtPos(75,4);
+    obj.Display();
+ iRet = obj.Count();
+    cout<<"Number of Nodes are : "<<iRet<<endl;
+    
+    obj.DeleteAtPos(4);
+    obj.Display();
+
+    iRet = obj.Count();
+    cout<<"Number of Nodes are : "<<iRet<<endl;
+    return 0;
+}
